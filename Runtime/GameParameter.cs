@@ -89,7 +89,7 @@ public abstract class NumberGameParameter<T> : GameParameter<T> where T : struct
 
 [Serializable]
 [Testable]
-public class IntGameParameter : NumberGameParameter<int>{
+public partial class IntGameParameter : NumberGameParameter<int>{
     // Arithmetic operators
     public static int operator +(IntGameParameter a, int b)=> a.Value + b;
     public static int operator +(int a, IntGameParameter b) => b + a;
@@ -150,7 +150,7 @@ public class IntGameParameter : NumberGameParameter<int>{
 
 [Serializable]
 [Testable]
-public class FloatGameParameter : NumberGameParameter<float>
+public partial class FloatGameParameter : NumberGameParameter<float>
 {
     // Arithmetic operators
     public static float operator +(FloatGameParameter a, float b) => a.Value + b;
