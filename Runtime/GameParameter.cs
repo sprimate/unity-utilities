@@ -136,16 +136,12 @@ public class IntGameParameter : NumberGameParameter<int>{
         Assert.IsTrue(intParam2 >= 20);
         Assert.IsTrue(20 <= intParam2);
 
-        Assert.IsTrue(intParam2 < -20);
-
         Assert.AreEqual(30, intParam1 + 20);
         Assert.AreEqual(30, 20 + intParam1);
         Assert.AreEqual(-10, intParam1 - 20);
         Assert.AreEqual(10, 20 - intParam1);
         Assert.AreEqual(200, intParam1 * 20);
         Assert.AreEqual(200, 20 * intParam1);
-
-
 
         Assert.AreEqual(0.5f, (float)intParam1 / 20.0f);
         Assert.AreEqual(2.0f, 20.0f / (float)intParam1);
