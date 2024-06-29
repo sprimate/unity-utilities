@@ -5,6 +5,7 @@ using UnityObservables;
 
 public abstract class GameParameter<T> : Observable<T>
 {
+    public GameParameter(T val) : base(val) { }
     protected OrderedDictionary setPreProcessors = new OrderedDictionary();
     protected OrderedDictionary getPreProcessors = new OrderedDictionary();
     public T RawValue => value;
@@ -68,6 +69,7 @@ public abstract class GameParameter<T> : Observable<T>
 
 public abstract class NumberGameParameter<T> : GameParameter<T> where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable
 {
+    public NumberGameParameter(T val) : base(val) { }
     // Comparison operators between NumberGameParameter<T, TDerived> and NumberGameParameter<T, TDerived>
     public static bool operator <(NumberGameParameter<T> a, NumberGameParameter<T> b) => a.Value.CompareTo(b.Value) < 0;
     public static bool operator >(NumberGameParameter<T> a, NumberGameParameter<T> b) => a.Value.CompareTo(b.Value) > 0;

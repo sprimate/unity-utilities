@@ -5,6 +5,7 @@ using UnityEngine.Assertions;
 [Testable]
 public partial class IntGameParameter : NumberGameParameter<int>
 {
+    public IntGameParameter(int val) : base(val) { }
     // Arithmetic operators
     public static int operator +(IntGameParameter a, int b) => a.Value + b;
     public static int operator +(int a, IntGameParameter b) => b + a;

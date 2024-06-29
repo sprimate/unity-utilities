@@ -5,6 +5,8 @@ using UnityEngine.Assertions;
 [Testable]
 public partial class FloatGameParameter : NumberGameParameter<float>
 {
+    public FloatGameParameter(float val) : base(val) { }
+
     // Arithmetic operators
     public static float operator +(FloatGameParameter a, float b) => a.Value + b;
     public static float operator +(float a, FloatGameParameter b) => b + a;
