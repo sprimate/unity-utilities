@@ -19,9 +19,8 @@ public partial class FloatGameParameter : NumberGameParameter<float>
 
     public static void RunTests()
     {
-        FloatGameParameter floatParam1 = new FloatGameParameter();
-        FloatGameParameter floatParam2 = new FloatGameParameter();
-        floatParam1.SetValue(10f);
+        FloatGameParameter floatParam1 = new FloatGameParameter(10f);
+        FloatGameParameter floatParam2 = new FloatGameParameter(20f);
 
         Assert.AreEqual(10f, floatParam1.Value);
         var x2Id = floatParam1.AddGetPreProcessor((val) => val * 2);

@@ -18,9 +18,8 @@ public partial class IntGameParameter : NumberGameParameter<int>
 
     public static void RunTests()
     {
-        IntGameParameter intParam1 = new IntGameParameter();
-        IntGameParameter intParam2 = new IntGameParameter();
-        intParam1.SetValue(10);
+        IntGameParameter intParam1 = new IntGameParameter(10);
+        IntGameParameter intParam2 = new IntGameParameter(20);
 
         Assert.AreEqual(10, intParam1.Value);
         var x2Id = intParam1.AddGetPreProcessor((val) => val * 2);
@@ -31,7 +30,6 @@ public partial class IntGameParameter : NumberGameParameter<int>
         Assert.AreEqual(intParam1.RawValue + 5, intParam1.Value);
         intParam1.RemoveGetPreProcessor(plus5Id); //back to raw 10
 
-        intParam2.Value = 20;
         Assert.AreEqual(20, intParam2.Value);
         var div2Id = intParam2.AddSetPreProcessor(val => val / 2);
         intParam2.Value = 20;
