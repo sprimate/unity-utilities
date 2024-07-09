@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -235,7 +234,7 @@ public class DebugHelper : MonoSingleton<DebugHelper>
                 try{
                     _primitiveMaterial = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
                 }
-                catch(Exception)
+                catch(System.Exception)
                 {
                     _primitiveMaterial = new Material(Shader.Find("Unlit/Color"));
                 }
