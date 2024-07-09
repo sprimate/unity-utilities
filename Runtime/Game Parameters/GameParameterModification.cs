@@ -31,12 +31,14 @@ public abstract class GameParameterModification
             }
         }
     }
-    public void Clean()
+    public virtual void Clean()
     {
         if (_priority.HasValue && gameParameterPreprocessors.ContainsKey(priority))
         {
             gameParameterPreprocessors.Remove(priority);
         }
+
+        _priority = null;
     }
 }
 

@@ -231,7 +231,13 @@ public class DebugHelper : MonoSingleton<DebugHelper>
         {
             if (_primitiveMaterial == null)
             {
-                _primitiveMaterial = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+                try{
+                    _primitiveMaterial = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+                }
+                catch(Exception)
+                {
+                    _primitiveMaterial = new Material(Shader.Find("Unlit/Color"));
+                }
             }
 
             return _primitiveMaterial;
