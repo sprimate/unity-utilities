@@ -27,9 +27,9 @@ public partial class FloatGameParameter : NumberGameParameter<float>
         Assert.AreEqual(floatParam1.RawValue * 2, floatParam1.Value);
         var plus5Id = floatParam1.AddGetPreProcessor(val => val + 5);
         Assert.AreEqual(floatParam1.RawValue * 2 + 5, floatParam1.Value);
-        floatParam1.RemoveGetPreProcessor(x2Id);
+        x2Id.Clean();
         Assert.AreEqual(floatParam1.RawValue + 5, floatParam1.Value);
-        floatParam1.RemoveGetPreProcessor(plus5Id); //back to raw 10
+        plus5Id.Clean(); //back to raw 10
 
         floatParam2.Value = 20f;
         Assert.AreEqual(20f, floatParam2.Value);
@@ -37,7 +37,7 @@ public partial class FloatGameParameter : NumberGameParameter<float>
         floatParam2.Value = 20f;
         Assert.AreEqual(10f, floatParam2.Value);
         Assert.AreEqual(floatParam2.RawValue, floatParam2.Value);
-        floatParam2.RemoveSetPreProcessor(div2Id);
+        div2Id.Clean();
         Assert.AreEqual(10f, floatParam2.Value);
         floatParam2.Value = 20f; //back to raw 20
         Assert.AreEqual(20f, floatParam2.Value);
@@ -61,5 +61,4 @@ public partial class FloatGameParameter : NumberGameParameter<float>
         Assert.AreEqual(0.5f, floatParam1 / 20f);
         Assert.AreEqual(2.0f, 20f / floatParam1);
     }
-
 }

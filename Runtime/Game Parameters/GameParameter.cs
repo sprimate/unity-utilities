@@ -6,54 +6,41 @@ using UnityObservables;
 public abstract class GameParameter<T> : Observable<T>
 {
     public GameParameter(T val) : base(val) { }
-    protected OrderedDictionary setPreProcessors = new OrderedDictionary();
-    protected OrderedDictionary getPreProcessors = new OrderedDictionary();
+    protected SortedList setPreProcessors = new SortedList();
+    protected SortedList getPreProcessors = new SortedList();
     public T RawValue => value;
     public override T Value 
     {
-        get { return ApplyPreProcessors(base.Value, ref getPreProcessors); }
+        get { return ApplyPreProcessors(base.Value, getPreProcessors); }
     }
 
     protected override T PreProcessSetValue(T incomingVal)
     {
-        return ApplyPreProcessors(incomingVal, ref setPreProcessors);
+        return ApplyPreProcessors(incomingVal, setPreProcessors);
     }
 
-    public Guid AddGetPreProcessor(Func<T, T> prerocessor)
+    public GameParameterModification<T> AddGetPreProcessor(Func<T, T> prerocessor, int priority = 0)
     {
-        return AddPreProcessor(prerocessor, ref getPreProcessors);
+        return AddPreProcessor(prerocessor, priority, getPreProcessors);
 
     }
-    public Guid AddSetPreProcessor(Func<T, T> prerocessor)
+    public GameParameterModification<T> AddSetPreProcessor(Func<T, T> prerocessor, int priority = 0)
     {
-        return AddPreProcessor(prerocessor, ref setPreProcessors);
+        return AddPreProcessor(prerocessor, priority, setPreProcessors);
     }
 
-    Guid AddPreProcessor(Func<T, T> preprocessor, ref OrderedDictionary preprocessors)
+    GameParameterModification<T> AddPreProcessor(Func<T, T> preprocessor, int priority, SortedList preprocessors)
     {
-        var ret = Guid.NewGuid();
-        preprocessors[ret] = preprocessor;
-        return ret;
+        return new GameParameterModification<T>(this, preprocessor, priority, preprocessors);
     }
 
-    public void RemoveSetPreProcessor(Guid guid)
+    protected virtual T ApplyPreProcessors(T value, SortedList preprocessors)
     {
-        setPreProcessors.Remove(guid);
-    }
-
-    public void RemoveGetPreProcessor(Guid guid)
-    {
-        getPreProcessors.Remove(guid);
-    }
-
-    protected virtual T ApplyPreProcessors(T value, ref OrderedDictionary preprocessors)
-    {
-        foreach(DictionaryEntry de in preprocessors)
+        foreach(GameParameterModification<T> modification in preprocessors.Values)
         {
-            Func<T, T> preprocessor = de.Value as Func<T, T>;
-            if (preprocessor != null)
+            if (modification?.preprocessor != null)
             {
-                value = preprocessor(value);
+                value = modification.preprocessor(value);
             }
         }
 
@@ -62,9 +49,8 @@ public abstract class GameParameter<T> : Observable<T>
 
     public override void SetValue(T value, bool _forceSendEvents = false)
     {
-        base.SetValue(ApplyPreProcessors(value, ref setPreProcessors), _forceSendEvents);
+        base.SetValue(ApplyPreProcessors(value, setPreProcessors), _forceSendEvents);
     }
-
 }
 
 public abstract class NumberGameParameter<T> : GameParameter<T> where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable

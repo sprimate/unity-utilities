@@ -23,19 +23,20 @@ public partial class IntGameParameter : NumberGameParameter<int>
 
         Assert.AreEqual(10, intParam1.Value);
         var x2Id = intParam1.AddGetPreProcessor((val) => val * 2);
+        Assert.AreEqual(x2Id.listIBelongTo.Count, 1);
         Assert.AreEqual(intParam1.RawValue * 2, intParam1.Value);
         var plus5Id = intParam1.AddGetPreProcessor(val => val + 5);
         Assert.AreEqual(intParam1.RawValue * 2 + 5, intParam1.Value);
-        intParam1.RemoveGetPreProcessor(x2Id);
+        x2Id.Clean();
         Assert.AreEqual(intParam1.RawValue + 5, intParam1.Value);
-        intParam1.RemoveGetPreProcessor(plus5Id); //back to raw 10
+        plus5Id.Clean(); //back to raw 10
 
         Assert.AreEqual(20, intParam2.Value);
         var div2Id = intParam2.AddSetPreProcessor(val => val / 2);
         intParam2.Value = 20;
         Assert.AreEqual(10, intParam2.Value);
         Assert.AreEqual(intParam2.RawValue, intParam2.Value);
-        intParam2.RemoveSetPreProcessor(div2Id);
+        div2Id.Clean();
         Assert.AreEqual(10, intParam2.Value);
         intParam2.Value = 20; //back to raw 20
         Assert.AreEqual(20, intParam2.Value);
