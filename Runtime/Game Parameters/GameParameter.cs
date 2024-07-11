@@ -9,13 +9,13 @@ public abstract class GameParameter<T> : Observable<T>
 {
     public GameParameter(T val) : base(val) 
     {
-        IComparer<float> descendingComparer = Comparer<float>.Create((x, y) => y.CompareTo(x));
-        setPreProcessors = new SortedList<float, GameParameterModification<T>>(descendingComparer);
-        getPreProcessors = new SortedList<float, GameParameterModification<T>>(descendingComparer);
+        IComparer<double> descendingComparer = Comparer<double>.Create((x, y) => y.CompareTo(x));
+        setPreProcessors = new SortedList<double, GameParameterModification<T>>(descendingComparer);
+        getPreProcessors = new SortedList<double, GameParameterModification<T>>(descendingComparer);
     }
 
-    protected SortedList<float, GameParameterModification<T>> setPreProcessors;
-    protected SortedList<float, GameParameterModification<T>> getPreProcessors;
+    protected SortedList<double, GameParameterModification<T>> setPreProcessors;
+    protected SortedList<double, GameParameterModification<T>> getPreProcessors;
     public T RawValue => value;
     public override T Value 
     {
@@ -46,13 +46,13 @@ public abstract class GameParameter<T> : Observable<T>
         return AddPreProcessor(prerocessor, priority, setPreProcessors);
     }
 
-    GameParameterModification<T> AddPreProcessor(Func<T, T> preprocessor, float priority, SortedList<float, GameParameterModification<T>> preprocessors)
+    GameParameterModification<T> AddPreProcessor(Func<T, T> preprocessor, float priority, SortedList<double, GameParameterModification<T>> preprocessors)
     {
         WarnAboutNullPreprocessors(preprocessors);
         return new GameParameterModification<T>(this, preprocessor, priority, preprocessors);
     }
 
-    protected virtual T ApplyPreProcessors(T value, SortedList<float, GameParameterModification<T>> preprocessors)
+    protected virtual T ApplyPreProcessors(T value, SortedList<double, GameParameterModification<T>> preprocessors)
     {
         WarnAboutNullPreprocessors(preprocessors);
         foreach (GameParameterModification<T> modification in preprocessors.Values)
@@ -66,7 +66,7 @@ public abstract class GameParameter<T> : Observable<T>
         return value;
     }
 
-    void WarnAboutNullPreprocessors(SortedList<float, GameParameterModification<T>> preprocessors)
+    void WarnAboutNullPreprocessors(SortedList<double, GameParameterModification<T>> preprocessors)
     {
         if (preprocessors == null)
         {
