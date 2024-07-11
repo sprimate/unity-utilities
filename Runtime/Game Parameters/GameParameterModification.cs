@@ -5,23 +5,24 @@ using UnityEngine;
 
 public abstract class GameParameterModification
 {
-    protected double? _priority;
-    public abstract float priority { get; set; }
+    protected int? _priority;
+    public abstract int priority { get; set; }
+    public abstract float GetTruePriority();
+    public bool HasValidPriority => _priority.HasValue;
     public abstract void Clean();
-
 }
 
 public class GameParameterModification<T> : GameParameterModification
 {
     public GameParameter<T> gameParameter { get; private set; }
     public Func<T, T> preprocessor;
-    public SortedList<double, GameParameterModification<T>> gameParameterPreprocessors { get; protected set; }
-    public override float priority
+    public PrioritizedPreProcessors<T> gameParameterPreprocessors { get; protected set; }
+
+    public override int priority
     {
         get
         {
-            float ret = _priority.HasValue ? (float)_priority.Value : default;
-            return float.IsPositiveInfinity(ret) ? float.MaxValue : (float.IsNegativeInfinity(ret) ? float.MinValue : ret);
+            return _priority.HasValue ? _priority.Value : int.MinValue;
         }
         set
         {
@@ -31,21 +32,12 @@ public class GameParameterModification<T> : GameParameterModification
                 Clean();
                 _priority = value;
 
-
-                while (_priority.HasValue && gameParameterPreprocessors.ContainsKey(_priority.Value))
-                {
-                    _priority -= 0.01;
-                }
-
-                if (_priority.HasValue)
-                {
-                    gameParameterPreprocessors.Add(_priority.Value, this);
-                }
+                gameParameterPreprocessors.Insert(this);
             }
         }
     }
 
-    public GameParameterModification(GameParameter<T> _gameParameter, Func<T, T> _preprocessor, float _priority, SortedList<double, GameParameterModification<T>> _preprocessorList)
+    public GameParameterModification(GameParameter<T> _gameParameter, Func<T, T> _preprocessor, int _priority, PrioritizedPreProcessors<T> _preprocessorList)
     {
         gameParameter = _gameParameter;
         gameParameterPreprocessors = _preprocessorList;
@@ -54,13 +46,15 @@ public class GameParameterModification<T> : GameParameterModification
         priority = _priority;//priority must be set last, as its property enforces the priority rules
     }
 
+    /// <summary>
+    /// True priority means there are no collisions
+    /// </summary>
+    /// <returns></returns>
+    public override float GetTruePriority() => gameParameterPreprocessors.GetPriority(this);
+
     public override void Clean()
     {
-        if (_priority.HasValue && gameParameterPreprocessors.ContainsKey(priority))
-        {
-            gameParameterPreprocessors.Remove(priority);
-        }
-
+        gameParameterPreprocessors.Remove(this);
         _priority = null;
     }
 }

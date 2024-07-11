@@ -7,15 +7,10 @@ using UnityObservables;
 
 public abstract class GameParameter<T> : Observable<T>
 {
-    public GameParameter(T val) : base(val) 
-    {
-        IComparer<double> descendingComparer = Comparer<double>.Create((x, y) => y.CompareTo(x));
-        setPreProcessors = new SortedList<double, GameParameterModification<T>>(descendingComparer);
-        getPreProcessors = new SortedList<double, GameParameterModification<T>>(descendingComparer);
-    }
+    public GameParameter(T val) : base(val) { }
 
-    protected SortedList<double, GameParameterModification<T>> setPreProcessors;
-    protected SortedList<double, GameParameterModification<T>> getPreProcessors;
+    protected PrioritizedPreProcessors<T> setPreProcessors = new PrioritizedPreProcessors<T>();
+    protected PrioritizedPreProcessors<T> getPreProcessors = new PrioritizedPreProcessors<T>();
     public T RawValue => value;
     public override T Value 
     {
@@ -33,7 +28,7 @@ public abstract class GameParameter<T> : Observable<T>
     /// <param name="prerocessor"></param>
     /// <param name="priority">Higher Priority PreProcessors are processed first</param>
     /// <returns></returns>
-    public GameParameterModification<T> AddGetPreProcessor(Func<T, T> prerocessor, float priority = 0f)
+    public GameParameterModification<T> AddGetPreProcessor(Func<T, T> prerocessor, int priority = 0)
     {
         var valueBeforeNewPreprocessor = Value;
         var ret = AddPreProcessor(prerocessor, priority, getPreProcessors);
@@ -41,21 +36,19 @@ public abstract class GameParameter<T> : Observable<T>
         return ret;
     }
 
-    public GameParameterModification<T> AddSetPreProcessor(Func<T, T> prerocessor, float priority = 0f)
+    public GameParameterModification<T> AddSetPreProcessor(Func<T, T> prerocessor, int priority = 0)
     {
         return AddPreProcessor(prerocessor, priority, setPreProcessors);
     }
 
-    GameParameterModification<T> AddPreProcessor(Func<T, T> preprocessor, float priority, SortedList<double, GameParameterModification<T>> preprocessors)
+    GameParameterModification<T> AddPreProcessor(Func<T, T> preprocessor, int priority, PrioritizedPreProcessors<T> preprocessors)
     {
-        WarnAboutNullPreprocessors(preprocessors);
         return new GameParameterModification<T>(this, preprocessor, priority, preprocessors);
     }
 
-    protected virtual T ApplyPreProcessors(T value, SortedList<double, GameParameterModification<T>> preprocessors)
+    protected virtual T ApplyPreProcessors(T value, PrioritizedPreProcessors<T> preprocessors)
     {
-        WarnAboutNullPreprocessors(preprocessors);
-        foreach (GameParameterModification<T> modification in preprocessors.Values)
+        foreach (GameParameterModification<T> modification in preprocessors)
         {
             if (modification?.preprocessor != null)
             {
@@ -64,14 +57,6 @@ public abstract class GameParameter<T> : Observable<T>
         }
 
         return value;
-    }
-
-    void WarnAboutNullPreprocessors(SortedList<double, GameParameterModification<T>> preprocessors)
-    {
-        if (preprocessors == null)
-        {
-            Debug.LogError("PreProcessors are not initialized. Are you sure you have a empty constructor in your derived class? The inspector requires it.");
-        }
     }
 
     public override void SetValue(T value, bool _forceSendEvents = false)

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 [Serializable]
@@ -66,7 +67,7 @@ public partial class FloatGameParameter : NumberGameParameter<float>
         //Test priorities
         FloatGameParameter priorityParamTest = new FloatGameParameter(100f);
 
-        priorityParamTest.AddGetPreProcessor(val => val * 2f, 10);
+        var initialPriorityModification = priorityParamTest.AddGetPreProcessor(val => val * 2f, 10);
         Assert.AreEqual(200f, priorityParamTest.Value);
         var modification = priorityParamTest.AddGetPreProcessor(val => val + 10, 0);
         Assert.AreEqual(210f, priorityParamTest.Value);
@@ -77,7 +78,15 @@ public partial class FloatGameParameter : NumberGameParameter<float>
         priorityParamTest.AddGetPreProcessor(val => val + 5, int.MaxValue);
         Assert.AreEqual(210f, priorityParamTest.Value);
         var samePriorityModification = priorityParamTest.AddGetPreProcessor(val => val + 2, 10);//same priority as the multiplication means it should happen after
-        Assert.IsTrue(samePriorityModification.priority < 10);
+        Assert.IsTrue(samePriorityModification.GetTruePriority() < initialPriorityModification.GetTruePriority());
+        Assert.AreEqual(10, samePriorityModification.priority);
         Assert.AreEqual(212f, priorityParamTest.Value);
+
+        var anotherSamePriorityModification = priorityParamTest.AddGetPreProcessor(val => val + 2, 10);//same priority as the multiplication means it should happen after
+        Assert.IsTrue(anotherSamePriorityModification.GetTruePriority() < samePriorityModification.GetTruePriority());
+        Assert.AreEqual(10, anotherSamePriorityModification.priority);
+        Debug.Log(anotherSamePriorityModification.GetTruePriority() + " < " + samePriorityModification.GetTruePriority() + " < " + initialPriorityModification.GetTruePriority());
+        Assert.AreEqual(214f, priorityParamTest.Value);
+
     }
 }
