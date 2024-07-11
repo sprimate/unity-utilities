@@ -60,5 +60,23 @@ public partial class FloatGameParameter : NumberGameParameter<float>
 
         Assert.AreEqual(0.5f, floatParam1 / 20f);
         Assert.AreEqual(2.0f, 20f / floatParam1);
+
+
+        //Test priorities
+        FloatGameParameter priorityParamTest = new FloatGameParameter(100f);
+
+        priorityParamTest.AddGetPreProcessor(val => val * 2f, 10);
+        Assert.AreEqual(200f, priorityParamTest.Value);
+        var modification = priorityParamTest.AddGetPreProcessor(val => val + 10, 0);
+        Assert.AreEqual(210f, priorityParamTest.Value);
+        modification.priority = 20;
+        Assert.AreEqual(220f, priorityParamTest.Value);
+        modification.Clean();
+        Assert.AreEqual(200f, priorityParamTest.Value);
+        priorityParamTest.AddGetPreProcessor(val => val + 5, int.MaxValue);
+        Assert.AreEqual(210f, priorityParamTest.Value);
+        var samePriorityModification = priorityParamTest.AddGetPreProcessor(val => val + 2, 10);//same priority as the multiplication means it should happen after
+        Assert.IsTrue(samePriorityModification.priority < 10);
+        Assert.AreEqual(212f, priorityParamTest.Value);
     }
 }
