@@ -15,6 +15,11 @@ public class GenericCoroutineManager : MonoSingleton<GenericCoroutineManager>
     Dictionary<Action, Action> nullificationActions = new Dictionary<Action, Action>();
 
     Action runOnLateUpdate;
+    Action runOnApplicationQuit;
+    public static void RunOnApplicationQuit(Action a)
+    {
+        instance.runOnApplicationQuit += a;
+    }
     public static void RunOnLateUpdate(Action a, object objectToCheckNullification, bool removeFromAction = false)
     {
         if (removeFromAction)
@@ -483,5 +488,10 @@ public class GenericCoroutineManager : MonoSingleton<GenericCoroutineManager>
             runOnNextLateUpdate.Invoke();
             runOnNextLateUpdate = null;
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        runOnApplicationQuit?.Invoke();
     }
 }
