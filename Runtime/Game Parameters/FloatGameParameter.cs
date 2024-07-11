@@ -85,7 +85,6 @@ public partial class FloatGameParameter : NumberGameParameter<float>
         var anotherSamePriorityModification = priorityParamTest.AddGetPreProcessor(val => val + 2, 10);//same priority as the multiplication means it should happen after
         Assert.IsTrue(anotherSamePriorityModification.GetTruePriority() < samePriorityModification.GetTruePriority());
         Assert.AreEqual(10, anotherSamePriorityModification.priority);
-        Debug.Log(anotherSamePriorityModification.GetTruePriority() + " < " + samePriorityModification.GetTruePriority() + " < " + initialPriorityModification.GetTruePriority());
         Assert.AreEqual(214f, priorityParamTest.Value);
 
     }

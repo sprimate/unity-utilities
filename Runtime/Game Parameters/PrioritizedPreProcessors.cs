@@ -15,17 +15,35 @@ public class PrioritizedPreProcessors<T> : IEnumerable<GameParameterModification
         priorityStructure = new SortedList<int, LinkedList<GameParameterModification<T>>>(descendingComparer);
     }
 
-    public float GetPriority(GameParameterModification<T> modification)
+    /// <summary>
+    /// If you really need to know an objects true priority, where each object in the structure's priority is uniqye, use this.
+    /// It should not be used frequently, since it involves linearly iterating over all preprocessors at O(n) time
+    /// </summary>
+    /// <param name="modification"></param>
+    /// <returns></returns>
+    public double GetPriority(GameParameterModification<T> modification)
     {
         if (priorityStructure.TryGetValue(modification.priority, out var list))
         {
             var node = linkedLIstNodeReferenceDict[modification];
-            float incrementValue = 0.0001f;
-            float priority = modification.priority;
-            while(node.Previous != null)
+            double priority = modification.priority;
+            float incrementValue = 0.00001f;
+
+            if (modification.priority == int.MinValue)
             {
-                node = node.Previous;
-                priority -= incrementValue;
+                while(node.Next != null)
+                {
+                    node = node.Next;
+                    priority += incrementValue;
+                }
+            }
+            else
+            {
+                while (node.Previous != null)
+                {
+                    node = node.Previous;
+                    priority -= incrementValue;
+                }
             }
 
             return priority;

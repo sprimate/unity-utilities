@@ -7,7 +7,7 @@ public abstract class GameParameterModification
 {
     protected int? _priority;
     public abstract int priority { get; set; }
-    public abstract float GetTruePriority();
+    public abstract double GetTruePriority();
     public bool HasValidPriority => _priority.HasValue;
     public abstract void Clean();
 }
@@ -50,7 +50,7 @@ public class GameParameterModification<T> : GameParameterModification
     /// True priority means there are no collisions
     /// </summary>
     /// <returns></returns>
-    public override float GetTruePriority() => gameParameterPreprocessors.GetPriority(this);
+    public override double GetTruePriority() => gameParameterPreprocessors.GetPriority(this);
 
     public override void Clean()
     {

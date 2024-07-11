@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 [Serializable]
@@ -61,5 +62,15 @@ public partial class IntGameParameter : NumberGameParameter<int>
 
         Assert.AreEqual(0.5f, (float)intParam1 / 20.0f);
         Assert.AreEqual(2.0f, 20.0f / (float)intParam1);
+
+        IntGameParameter anotherParam = new IntGameParameter(10);
+        var minPriority = anotherParam.AddGetPreProcessor(val => val * 2, int.MinValue);
+        var minPriority2 = anotherParam.AddGetPreProcessor(val => val + 2, int.MinValue);
+        var minPriority3 = anotherParam.AddGetPreProcessor(val => Mathf.RoundToInt(val / 3f), int.MinValue);
+        Assert.IsTrue(minPriority3.GetTruePriority() < minPriority2.GetTruePriority());
+        Assert.IsTrue(minPriority2.GetTruePriority() < minPriority.GetTruePriority());
+        Assert.IsTrue(minPriority3.priority == minPriority.priority);
+
+
     }
 }
