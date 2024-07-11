@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using UnityEngine;
 using UnityObservables;
 
 public abstract class GameParameter<T> : Observable<T>
@@ -13,12 +14,9 @@ public abstract class GameParameter<T> : Observable<T>
         getPreProcessors = new SortedList<float, GameParameterModification<T>>(descendingComparer);
     }
 
-
     protected SortedList<float, GameParameterModification<T>> setPreProcessors;
     protected SortedList<float, GameParameterModification<T>> getPreProcessors;
     public T RawValue => value;
-
-
     public override T Value 
     {
         get { return ApplyPreProcessors(base.Value, getPreProcessors); }
@@ -50,12 +48,14 @@ public abstract class GameParameter<T> : Observable<T>
 
     GameParameterModification<T> AddPreProcessor(Func<T, T> preprocessor, float priority, SortedList<float, GameParameterModification<T>> preprocessors)
     {
+        WarnAboutNullPreprocessors(preprocessors);
         return new GameParameterModification<T>(this, preprocessor, priority, preprocessors);
     }
 
     protected virtual T ApplyPreProcessors(T value, SortedList<float, GameParameterModification<T>> preprocessors)
     {
-        foreach(GameParameterModification<T> modification in preprocessors.Values)
+        WarnAboutNullPreprocessors(preprocessors);
+        foreach (GameParameterModification<T> modification in preprocessors.Values)
         {
             if (modification?.preprocessor != null)
             {
@@ -64,6 +64,14 @@ public abstract class GameParameter<T> : Observable<T>
         }
 
         return value;
+    }
+
+    void WarnAboutNullPreprocessors(SortedList<float, GameParameterModification<T>> preprocessors)
+    {
+        if (preprocessors == null)
+        {
+            Debug.LogError("PreProcessors are not initialized. Are you sure you have a empty constructor in your derived class? The inspector requires it.");
+        }
     }
 
     public override void SetValue(T value, bool _forceSendEvents = false)
@@ -75,6 +83,7 @@ public abstract class GameParameter<T> : Observable<T>
 public abstract class NumberGameParameter<T> : GameParameter<T> where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable
 {
     public NumberGameParameter(T val) : base(val) { }
+
     // Comparison operators between NumberGameParameter<T, TDerived> and NumberGameParameter<T, TDerived>
     public static bool operator <(NumberGameParameter<T> a, NumberGameParameter<T> b) => a.Value.CompareTo(b.Value) < 0;
     public static bool operator >(NumberGameParameter<T> a, NumberGameParameter<T> b) => a.Value.CompareTo(b.Value) > 0;

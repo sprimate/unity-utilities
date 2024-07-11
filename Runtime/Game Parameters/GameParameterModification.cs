@@ -63,7 +63,7 @@ public class GameParameterModification<T> : GameParameterModification
         gameParameterPreprocessors = _preprocessorList;
         preprocessor = _preprocessor;
 
-        priority = _priority;//priority must be set last, as the property enforces the priority rules
+        priority = _priority;//priority must be set last, as its property enforces the priority rules
     }
 
     public override void Clean()
