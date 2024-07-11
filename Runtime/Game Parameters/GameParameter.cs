@@ -37,9 +37,12 @@ public abstract class GameParameter<T> : Observable<T>
     /// <returns></returns>
     public GameParameterModification<T> AddGetPreProcessor(Func<T, T> prerocessor, float priority = 0f)
     {
-        return AddPreProcessor(prerocessor, priority, getPreProcessors);
-
+        var valueBeforeNewPreprocessor = Value;
+        var ret = AddPreProcessor(prerocessor, priority, getPreProcessors);
+        ProcessEvents(valueBeforeNewPreprocessor, false);
+        return ret;
     }
+
     public GameParameterModification<T> AddSetPreProcessor(Func<T, T> prerocessor, float priority = 0f)
     {
         return AddPreProcessor(prerocessor, priority, setPreProcessors);

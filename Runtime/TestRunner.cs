@@ -8,7 +8,7 @@ public class TestRunner
 #if UNITY_EDITOR
     [UnityEditor.MenuItem("Tools/Run All Tests")]
 #endif
-    public static void RunAllTests()
+    public static void RunAllTests() //ToDo, allow this to handle editor coroutines, to test timing based things
     {
         // Get all assemblies
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();

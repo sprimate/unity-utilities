@@ -60,15 +60,29 @@ namespace UnityObservables {
                 prevValue = value;
                 prevValueInitialized = true;
                 this.value = incomingVal;
-                if (OnChanged != null) {
-                    OnChanged();
-                }
+                ProcessEvents(prevValue, true);
+                
+            }
+        }
 
-                OnChangedValue.SafeInvoke(value);
+        protected void ProcessEvents(T previousValueToUse, bool forceSend)
+        {
+            var valToUse = Value;
+            if (!forceSend && EqualityComparer<T>.Default.Equals(previousValueToUse, valToUse))
+            {
+                return;
+            }
 
-                if (OnChangedValues != null) {
-                    OnChangedValues(prevValue, value);
-                }
+            if (OnChanged != null)
+            {
+                OnChanged();
+            }
+
+            OnChangedValue.SafeInvoke(valToUse);
+
+            if (OnChangedValues != null)
+            {
+                OnChangedValues(previousValueToUse, valToUse);
             }
         }
 
