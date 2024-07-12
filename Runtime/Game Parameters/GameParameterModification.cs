@@ -19,7 +19,7 @@ public abstract class GameParameterModification
 public class GameParameterModification<T> : GameParameterModification
 {
     public GameParameter<T> gameParameter { get; private set; }
-    public Func<T, T> preprocessor;
+    public Func<(T val, object context), T> preprocessor;
     public PrioritizedPreProcessors<T> gameParameterPreprocessors { get; protected set; }
 
     public override int priority
@@ -41,7 +41,7 @@ public class GameParameterModification<T> : GameParameterModification
         }
     }
 
-    public GameParameterModification(GameParameter<T> _gameParameter, Func<T, T> _preprocessor, int _priority, PrioritizedPreProcessors<T> _preprocessorList)
+    public GameParameterModification(GameParameter<T> _gameParameter, Func<(T val, object context), T> _preprocessor, int _priority, PrioritizedPreProcessors<T> _preprocessorList)
     {
         gameParameter = _gameParameter;
         gameParameterPreprocessors = _preprocessorList;

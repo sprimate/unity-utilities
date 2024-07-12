@@ -28,7 +28,7 @@ public abstract class GameParameter<T> : Observable<T>
     /// <param name="prerocessor"></param>
     /// <param name="priority">Higher Priority PreProcessors are processed first</param>
     /// <returns></returns>
-    public GameParameterModification<T> AddGetPreProcessor(Func<T, T> prerocessor, int priority = 0)
+    public GameParameterModification<T> AddGetPreProcessor(Func<(T val, object context), T> prerocessor, int priority = 0)
     {
         var valueBeforeNewPreprocessor = Value;
         var ret = AddPreProcessor(prerocessor, priority, getPreProcessors);
@@ -36,9 +36,25 @@ public abstract class GameParameter<T> : Observable<T>
         return ret;
     }
 
-    public GameParameterModification<T> AddSetPreProcessor(Func<T, T> prerocessor, int priority = 0)
+    public GameParameterModification<T> AddGetPreProcessor(Func<T, T> prerocessor, int priority = 0)
+    {
+        return AddGetPreProcessor((data) =>
+        {
+            return prerocessor.Invoke(data.val); 
+        }, priority);
+    }
+
+    public GameParameterModification<T> AddSetPreProcessor(Func<(T val, object context), T> prerocessor, int priority = 0)
     {
         return AddPreProcessor(prerocessor, priority, setPreProcessors);
+    }
+
+    public GameParameterModification<T> AddSetPreProcessor(Func<T, T> prerocessor, int priority = 0)
+    {
+        return AddSetPreProcessor((data) =>
+        {
+            return prerocessor.Invoke(data.val);
+        }, priority);
     }
 
     public void Clean(GameParameterModification<T> modification)
@@ -49,22 +65,32 @@ public abstract class GameParameter<T> : Observable<T>
         ProcessEvents(valBefore, false);
     }
 
-    GameParameterModification<T> AddPreProcessor(Func<T, T> preprocessor, int priority, PrioritizedPreProcessors<T> preprocessors)
+    GameParameterModification<T> AddPreProcessor(Func<(T val, object context), T> preprocessor, int priority, PrioritizedPreProcessors<T> preprocessors)
     {
         return new GameParameterModification<T>(this, preprocessor, priority, preprocessors);
     }
 
     protected virtual T ApplyPreProcessors(T value, PrioritizedPreProcessors<T> preprocessors)
     {
+        return ApplyPreProcessors(value, null, preprocessors);
+    }
+
+    protected virtual T ApplyPreProcessors(T value, object context, PrioritizedPreProcessors<T> preprocessors)
+    {
         foreach (GameParameterModification<T> modification in preprocessors)
         {
             if (modification?.preprocessor != null)
             {
-                value = modification.preprocessor(value);
+                value = modification.preprocessor((value, context));
             }
         }
 
         return value;
+    }
+
+    public void SetValueWithContext(T value, object context, bool _forceSendEvents = false)
+    {
+        base.SetValue(ApplyPreProcessors(value, context, setPreProcessors), _forceSendEvents);
     }
 
     public override void SetValue(T value, bool _forceSendEvents = false)
