@@ -1,8 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using UnityEngine;
 using UnityObservables;
 
 public abstract class GameParameter<T> : Observable<T>
@@ -23,12 +19,12 @@ public abstract class GameParameter<T> : Observable<T>
     }
 
     /// <summary>
-    /// 
+    /// Add a preProcessor that will be executed whenever a "Get" is called on the Value
     /// </summary>
-    /// <param name="prerocessor"></param>
+    /// <param name="prerocessor">the 'object' is an optional context that you can provide</param>
     /// <param name="priority">Higher Priority PreProcessors are processed first</param>
     /// <returns></returns>
-    public GameParameterModification<T> AddGetPreProcessor(Func<(T val, object context), T> prerocessor, int priority = 0)
+    public GameParameterModification<T> AddGetPreProcessor(Func<T, object, T> prerocessor, int priority = 0)
     {
         var valueBeforeNewPreprocessor = Value;
         var ret = AddPreProcessor(prerocessor, priority, getPreProcessors);
@@ -38,22 +34,28 @@ public abstract class GameParameter<T> : Observable<T>
 
     public GameParameterModification<T> AddGetPreProcessor(Func<T, T> prerocessor, int priority = 0)
     {
-        return AddGetPreProcessor((data) =>
+        return AddGetPreProcessor((val, context) =>
         {
-            return prerocessor.Invoke(data.val); 
+            return prerocessor.Invoke(val); 
         }, priority);
     }
 
-    public GameParameterModification<T> AddSetPreProcessor(Func<(T val, object context), T> prerocessor, int priority = 0)
+    /// <summary>
+    /// Add a preProcessor that will be executed whenever a "Set" is called on the Value
+    /// </summary>
+    /// <param name="prerocessor"></param>
+    /// <param name="priority">Higher Priority PreProcessors are processed first</param>
+    /// <returns></returns>
+    public GameParameterModification<T> AddSetPreProcessor(Func<T, object, T> prerocessor, int priority = 0)
     {
         return AddPreProcessor(prerocessor, priority, setPreProcessors);
     }
 
     public GameParameterModification<T> AddSetPreProcessor(Func<T, T> prerocessor, int priority = 0)
     {
-        return AddSetPreProcessor((data) =>
+        return AddSetPreProcessor((val, context) =>
         {
-            return prerocessor.Invoke(data.val);
+            return prerocessor.Invoke(val);
         }, priority);
     }
 
@@ -65,7 +67,7 @@ public abstract class GameParameter<T> : Observable<T>
         ProcessEvents(valBefore, false);
     }
 
-    GameParameterModification<T> AddPreProcessor(Func<(T val, object context), T> preprocessor, int priority, PrioritizedPreProcessors<T> preprocessors)
+    GameParameterModification<T> AddPreProcessor(Func<T, object, T> preprocessor, int priority, PrioritizedPreProcessors<T> preprocessors)
     {
         return new GameParameterModification<T>(this, preprocessor, priority, preprocessors);
     }
@@ -81,7 +83,7 @@ public abstract class GameParameter<T> : Observable<T>
         {
             if (modification?.preprocessor != null)
             {
-                value = modification.preprocessor((value, context));
+                value = modification.preprocessor(value, context);
             }
         }
 
