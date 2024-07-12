@@ -41,6 +41,14 @@ public abstract class GameParameter<T> : Observable<T>
         return AddPreProcessor(prerocessor, priority, setPreProcessors);
     }
 
+    public void Clean(GameParameterModification<T> modification)
+    {
+        var valBefore = Value;
+        modification.gameParameterPreprocessors.Remove(modification);
+        modification.ResetPriority();
+        ProcessEvents(valBefore, false);
+    }
+
     GameParameterModification<T> AddPreProcessor(Func<T, T> preprocessor, int priority, PrioritizedPreProcessors<T> preprocessors)
     {
         return new GameParameterModification<T>(this, preprocessor, priority, preprocessors);

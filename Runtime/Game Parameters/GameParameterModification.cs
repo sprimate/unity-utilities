@@ -10,6 +10,10 @@ public abstract class GameParameterModification
     public abstract double GetTruePriority();
     public bool HasValidPriority => _priority.HasValue;
     public abstract void Clean();
+    public void ResetPriority()
+    {
+        _priority = null;
+    }
 }
 
 public class GameParameterModification<T> : GameParameterModification
@@ -54,7 +58,6 @@ public class GameParameterModification<T> : GameParameterModification
 
     public override void Clean()
     {
-        gameParameterPreprocessors.Remove(this);
-        _priority = null;
+        gameParameter.Clean(this);
     }
 }
