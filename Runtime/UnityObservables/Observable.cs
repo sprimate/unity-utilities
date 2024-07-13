@@ -48,10 +48,11 @@ namespace UnityObservables {
         }
 
         bool forceSendEvents = false;
+        bool skipPreProcessing;
         public virtual T Value {
             get { return value; }
             set {
-                T incomingVal = PreProcessSetValue(value);
+                T incomingVal = skipPreProcessing ? value : PreProcessSetValue(value);
                 if (EqualityComparer<T>.Default.Equals(incomingVal, this.value) && !forceSendEvents) {
                     return;
                 }
@@ -88,9 +89,11 @@ namespace UnityObservables {
 
         protected virtual T PreProcessSetValue(T incomingVal) => incomingVal;
 
-        public virtual void SetValue(T value, bool _forceSendEvents = false) {
+        public virtual void SetValue(T value, bool _skipPreProcessing = false, bool _forceSendEvents = false) {
             forceSendEvents = _forceSendEvents;
+            skipPreProcessing = _skipPreProcessing;
             Value = value;
+            skipPreProcessing = false;
         }
 
         public static explicit operator T(Observable<T> observable) {

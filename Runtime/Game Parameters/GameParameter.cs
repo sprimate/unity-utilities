@@ -92,12 +92,7 @@ public abstract class GameParameter<T> : Observable<T>
 
     public void SetValueWithContext(T value, object context, bool _forceSendEvents = false)
     {
-        base.SetValue(ApplyPreProcessors(value, context, setPreProcessors), _forceSendEvents);
-    }
-
-    public override void SetValue(T value, bool _forceSendEvents = false)
-    {
-        base.SetValue(ApplyPreProcessors(value, setPreProcessors), _forceSendEvents);
+        base.SetValue(ApplyPreProcessors(value, context, setPreProcessors), true, _forceSendEvents);
     }
 }
 
