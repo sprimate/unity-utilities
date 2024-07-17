@@ -1,3 +1,6 @@
+using System;
+
+[Serializable]
 public class BoolGameParameter : GameParameter<bool> 
 {
     public BoolGameParameter(bool val) : base(val) { }
