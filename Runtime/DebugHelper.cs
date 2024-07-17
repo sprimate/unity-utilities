@@ -9,8 +9,6 @@ using UnityEngine.Pool;
 public class DebugHelper : MonoSingleton<DebugHelper>
 {
     protected override bool ShouldDestroyOnLoad => true;
-    public GenericObjectPool<LineRenderer> LineRendererPool { get; protected set; }
-    public GenericObjectPool<Renderer> SpherePool { get; protected set; }
 
     void OnCreate<T>(T created) where T : Component
     {
@@ -199,7 +197,8 @@ public class DebugHelper : MonoSingleton<DebugHelper>
 
     protected void DrawLineInternal(Vector3[] points, ref Dictionary<LineRenderer, float> dict, float? lifeTime)
     {
-        LineRenderer rend = LineRendererPool.Get();
+        LineRenderer rend = new GameObject().AddComponent<LineRenderer>();// LineRendererPool.Get();
+        OnCreate(rend);
         rend.startColor = Color;
         rend.endColor = Color;
         rend.widthMultiplier = lineWidth;
@@ -246,11 +245,11 @@ public class DebugHelper : MonoSingleton<DebugHelper>
     protected void DrawPrimitiveInternal(Vector3 position, ref Dictionary<GameObject, float> dict, PrimitiveType primitiveType, Vector3? scale, float? lifetime)
     {
         GameObject go = null;
-        if (primitiveType == PrimitiveType.Sphere)
+        /*if (primitiveType == PrimitiveType.Sphere)
         {
-            go = SpherePool.Get().gameObject;
+            go =  SpherePool.Get().gameObject;
         }
-        else
+        else*/
         {
             go = GameObject.CreatePrimitive(primitiveType);
             go.transform.SetParent(transform);
@@ -282,14 +281,14 @@ public class DebugHelper : MonoSingleton<DebugHelper>
         var gcm = GenericCoroutineManager.instance;//create if it's not there, to allow for proper clearing and cleaning up on scene exit
         StartCoroutine(Clear());
         StartCoroutine(ClearFixed());
-        LineRendererPool = new GenericObjectPool<LineRenderer>(OnCreate<LineRenderer>);
+        /*LineRendererPool = new GenericObjectPool<LineRenderer>(OnCreate<LineRenderer>);
         SpherePool = new GenericObjectPool<Renderer>(() =>
         {
             var primitive = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             var renderer = primitive.GetComponent<Renderer>();
             OnCreate(renderer);
             return renderer;
-        });
+        });*/
     }
 
     List<LogObj> lastLogged = new List<LogObj>();
