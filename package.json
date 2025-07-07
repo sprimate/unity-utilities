@@ -12,7 +12,8 @@
     "com.unity.modules.physics": "1.0.0",
     "com.unity.modules.physics2d": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
-    "com.unity.ugui": "2.0.0",
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10"
-  }
+    "com.unity.ugui": "2.0.0"
+  },
+  "manualDependencyToAdd" : "'com.cysharp.unitask': 'https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10'",
+  "instructions": "Unity doesn't support git dependencies like this, so you cneed to add UniTask directly. This is the version I've been using"
 }
