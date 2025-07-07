@@ -1,4 +1,4 @@
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +14,7 @@ public class Map<T1, T2> : IEnumerable<KeyValuePair<T1, T2>>
     public Dictionary<T2, T1> ReverseDict = new Dictionary<T2, T1>();
 
     public Map()
-    {
+    {            
         this.Forward = new Indexer<T1, T2>(ForwardDict);
         this.Reverse = new Indexer<T2, T1>(ReverseDict);
     }

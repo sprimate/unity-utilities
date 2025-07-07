@@ -12,6 +12,7 @@ public static class ExtendedLerp  {
 		t = 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
 		return Vector3.Lerp(start,end,t);
 	}
+
 	public static Vector3 Smoothstep(Vector3 start, Vector3 end, float t){
 		t = t*t * (3f - 2f*t);
 		return Vector3.Lerp(start,end,t);
@@ -21,7 +22,6 @@ public static class ExtendedLerp  {
 		t = t*t*t * (t * (6f*t - 15f) + 10f);
 		return Vector3.Lerp(start,end,t);
 	}
-
 
 	public static float Smoothstep(float start, float end, float t){
 		t = t*t * (3f - 2f*t);
