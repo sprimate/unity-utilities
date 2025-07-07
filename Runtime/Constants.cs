@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-public class Constants : MonoSingleton<Constants>
+public class Constants : AMonoSingleton<Constants>
 {
     #region Layers
     public const int UI_LAYER = 5;

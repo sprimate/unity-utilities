@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AConnectionManager<T1, T2> : MonoSingleton<T1> where T1 : AConnectionManager<T1, T2> where T2: AConnectionConfiguration
+public abstract class AConnectionManager<T1, T2> : AMonoSingleton<T1> where T1 : AConnectionManager<T1, T2> where T2: AConnectionConfiguration
  {
     public bool autoFindConfiguration = true;
     //Whenever a new object is found, use the new configuration for the original instance

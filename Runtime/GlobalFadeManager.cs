@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Sprimate
 {
-    public class GlobalFadeManager : MonoSingleton<GlobalFadeManager> {
+    public class GlobalFadeManager : AMonoSingleton<GlobalFadeManager> {
 
         protected override bool ShouldDestroyOnLoad
         {

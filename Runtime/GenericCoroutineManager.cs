@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Threading;
 
-public class GenericCoroutineManager : MonoSingleton<GenericCoroutineManager>
+public class GenericCoroutineManager : AMonoSingleton<GenericCoroutineManager>
 {
     Thread mainThread;
 

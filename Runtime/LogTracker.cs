@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LogTracker : MonoSingleton<LogTracker>
+public class LogTracker : AMonoSingleton<LogTracker>
 {
     public static List<Log> logs { get; private set; } = new List<Log>();
     static bool initialized = false;

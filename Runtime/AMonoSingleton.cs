@@ -11,7 +11,7 @@ using UnityEngine.Serialization;
 #if UNITY_EDITOR
 [UnityEditor.InitializeOnLoadAttribute]
 #endif
-public static class MonoSingleton
+public static class AMonoSingleton
 {
     public static bool applicationExiting;
 
@@ -42,7 +42,7 @@ public static class MonoSingleton
     }
 
 #if UNITY_EDITOR
-    static MonoSingleton()
+    static AMonoSingleton()
     {
         //If domain not reloaded, statics don't get reset
         UnityEditor.EditorApplication.playModeStateChanged += (state) =>
@@ -66,7 +66,7 @@ public static class MonoSingleton
 /// Override <code>Init()</code> method instead of using <code>Awake()</code>
 /// from this class.
 /// </summary>
-public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
+public abstract class AMonoSingleton<T> : MonoBehaviour where T : AMonoSingleton<T>
 {
     protected virtual bool ShouldCreateIfNull { get => true; }
 
@@ -132,14 +132,14 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
     {
         get
         {
-            if (MonoSingleton.applicationExiting || !Application.isPlaying)
+            if (AMonoSingleton.applicationExiting || !Application.isPlaying)
             {
                 return null;
             }
 
             if (m_Instance == null)
             {
-                m_Instance = MonoSingleton.GetInstance<T>(true) as T;
+                m_Instance = AMonoSingleton.GetInstance<T>(true) as T;
             }
 
             // Object not found, we create a temporary one
@@ -307,7 +307,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
     private void OnApplicationQuit()
     {
         m_Instance = null;
-        MonoSingleton.applicationExiting = true;
+        AMonoSingleton.applicationExiting = true;
     }
 
     private void OnDestroy()

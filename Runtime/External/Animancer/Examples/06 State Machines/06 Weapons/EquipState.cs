@@ -127,7 +127,7 @@ namespace Animancer.Examples.StateMachines.Weapons
 
         private void FixedUpdate()
         {
-            Character.Rigidbody.velocity = default;
+            Character.Rigidbody.linearVelocity = default;
         }
 
         /************************************************************************************************************************/

@@ -38,7 +38,7 @@ namespace Animancer.Examples.StateMachines.Brains
         /// </remarks>
         private void FixedUpdate()
         {
-            Character.Rigidbody.velocity = default;
+            Character.Rigidbody.linearVelocity = default;
         }
 
         /************************************************************************************************************************/

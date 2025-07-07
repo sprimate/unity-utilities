@@ -130,7 +130,7 @@ namespace Animancer.Examples.Locomotion
         private void FixedUpdate()
         {
             // Move the rigidbody in the desired direction.
-            _Body.velocity = _Move.State.Speed * _MovementSpeed * _MovementDirection;
+            _Body.linearVelocity = _Move.State.Speed * _MovementSpeed * _MovementDirection;
         }
 
         /************************************************************************************************************************/

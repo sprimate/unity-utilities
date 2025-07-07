@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 
 [ExecuteInEditMode]
-public class DebugHelper : MonoSingleton<DebugHelper>
+public class DebugHelper : AMonoSingleton<DebugHelper>
 {
     protected override bool ShouldDestroyOnLoad => true;
 

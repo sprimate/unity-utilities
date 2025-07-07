@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToggleDisplayDeveloperConsole : MonoSingleton<ToggleDisplayDeveloperConsole>
+public class ToggleDisplayDeveloperConsole : AMonoSingleton<ToggleDisplayDeveloperConsole>
 {
     protected override bool ShouldDestroyOnLoad => false;
     public bool displayDevConsole;
