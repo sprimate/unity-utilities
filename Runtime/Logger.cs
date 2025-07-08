@@ -14,6 +14,7 @@ namespace HitTrax.CoreUtilities
         private static Stopwatch _traceTimeStamp = Stopwatch.StartNew();
         private static int _traceFrameCount ;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Init()
         {
             static async UniTask CacheFrameCountLoop()
