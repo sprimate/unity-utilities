@@ -1,6 +1,6 @@
 {
   "name": "com.sprimatestudios.utilities",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "displayName": "Sprimate Utilities",
   "description": "Utilities developed by Sprimate throughout his Unity career.",
   "unity": "2022.3",
@@ -9,7 +9,7 @@
     "com.unity.editorcoroutines": "1.0.0",
     "com.unity.mathematics" : "1.2.6",
     "com.unity.ugui": "2.0.0",
-    "com.unity.modules.uielements": "1.0.0"
+    "com.unity.modules.screencapture": "1.0.0"
   },
   "manualDependenciesToAdd" : {
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10",
