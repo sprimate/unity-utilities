@@ -8,8 +8,9 @@
     "com.unity.nuget.newtonsoft-json": "3.0.2",
     "com.unity.editorcoroutines": "1.0.0",
     "com.unity.mathematics" : "1.2.6",
-    "com.unity.ugui": "2.0.0"
+    "com.unity.ugui": "2.0.0",
+    "com.boxqkrtm.ide.cursor": "https://github.com/boxqkrtm/com.unity.ide.cursor.git"
   },
   "manualDependencyToAdd" : "'com.cysharp.unitask': 'https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10'",
-  "instructions": "Unity doesn't support git dependencies like this, so you cneed to add UniTask directly. This is the version I've been using"
+  "instructions": "Unity doesn't support git dependencies like this, so you need to add UniTask directly. This is the version I've been using"
 }
