@@ -1,6 +1,6 @@
 {
   "name": "com.sprimatestudios.utilities",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "displayName": "Sprimate Utilities",
   "description": "Utilities developed by Sprimate throughout his Unity career.",
   "unity": "2022.3",
@@ -24,5 +24,5 @@
   "manualDependenciesToAdd" : {
     "com.boxqkrtm.ide.cursor": "https://github.com/boxqkrtm/com.unity.ide.cursor.git"
   },
-  "instructions": "Unity doesn't support git dependencies like this, so you need to add UniTask directly. These are the versions I've been using"
+  "instructions": "Unity doesn't support git dependencies like this, so you need to add UniTask directly. These are the versions I've been using. And Unity needs to "
 }
