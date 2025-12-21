@@ -16,6 +16,16 @@ public static class EnumExt
 		return (Convert.ToUInt32(input) & Convert.ToUInt32(matchTo)) != 0;
 	}
 
+    public static bool AddFlag(this Enum input, Enum flag)
+    {
+        return (Convert.ToUInt32(input) | Convert.ToUInt32(flag)) != 0;
+    }
+
+    public static bool RemoveFlag(this Enum input, Enum flag)
+    {
+        return (Convert.ToUInt32(input) & ~Convert.ToUInt32(flag)) != 0;
+    }
+
     static Dictionary<string, List<string>> enumNameCache = new Dictionary<string, List<string>>();
 
     public static List<string> GetEnumNamesWithSpaces<T>()
