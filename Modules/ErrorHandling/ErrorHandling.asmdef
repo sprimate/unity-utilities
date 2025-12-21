@@ -1,0 +1,17 @@
+{
+    "name": "ErrorHandling",
+    "rootNamespace": "HitTrax.ErrorHandling",
+    "references": [
+        "CoreUtilities",
+        "GlobalMessagingService"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

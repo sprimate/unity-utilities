@@ -1,0 +1,9 @@
+{
+    "moduleName": "ErrorHandling",
+    "moduleNamespace": "HitTrax.ErrorHandling",
+    "moduleDependencies": [
+        "CoreUtilities",
+        "GlobalMessagingService"
+    ],
+    "precompiledDependencies": []
+}

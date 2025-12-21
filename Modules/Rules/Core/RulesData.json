@@ -1,0 +1,10 @@
+{
+    "moduleName": "Rules",
+    "moduleNamespace": "HitTrax.Rules",
+    "moduleDependencies": [
+        "CoreUtilities",
+        "ErrorHandling",
+        "GlobalMessagingService"
+    ],
+    "precompiledDependencies": []
+}
