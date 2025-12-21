@@ -6,24 +6,24 @@ using System.Text.RegularExpressions;
 
 public static class EnumExt
 {
-	public static IEnumerable<T> GetValues<T>()
-	{
-		return Enum.GetValues(typeof(T)).Cast<T>();
-	}
-
-	public static bool IsSet(this Enum input, Enum matchTo)
-	{
-		return (Convert.ToUInt32(input) & Convert.ToUInt32(matchTo)) != 0;
-	}
-
-    public static bool AddFlag(this Enum input, Enum flag)
+    public static IEnumerable<T> GetValues<T>()
     {
-        return (Convert.ToUInt32(input) | Convert.ToUInt32(flag)) != 0;
+        return Enum.GetValues(typeof(T)).Cast<T>();
     }
 
-    public static bool RemoveFlag(this Enum input, Enum flag)
+    public static bool IsSet(this Enum input, Enum matchTo)
     {
-        return (Convert.ToUInt32(input) & ~Convert.ToUInt32(flag)) != 0;
+        return (Convert.ToUInt32(input) & Convert.ToUInt32(matchTo)) != 0;
+    }
+
+    public static T AddFlag<T>(this T input, T flag) where T : Enum
+    {
+        return (T)Enum.ToObject(typeof(T), Convert.ToUInt32(input) | Convert.ToUInt32(flag));
+    }
+
+    public static T RemoveFlag<T>(this T input, T flag) where T : Enum
+    {
+        return (T)Enum.ToObject(typeof(T), Convert.ToUInt32(input) & ~Convert.ToUInt32(flag));
     }
 
     static Dictionary<string, List<string>> enumNameCache = new Dictionary<string, List<string>>();
@@ -31,8 +31,8 @@ public static class EnumExt
     public static List<string> GetEnumNamesWithSpaces<T>()
     {
         string enumTypeName = typeof(T).ToString();
-        if (enumNameCache.ContainsKey(enumTypeName) && 
-            enumNameCache[enumTypeName] != null && 
+        if (enumNameCache.ContainsKey(enumTypeName) &&
+            enumNameCache[enumTypeName] != null &&
             enumNameCache[enumTypeName].Count > 0)
         {
             return enumNameCache[enumTypeName];
@@ -48,7 +48,7 @@ public static class EnumExt
                  (?<=[^A-Z])(?=[A-Z]) |
                  (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
 
-        
+
         foreach (var name in Enum.GetNames(typeof(T)))
         {
             names.Add(r.Replace(name, " "));
