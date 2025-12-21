@@ -1,0 +1,9 @@
+{
+    "moduleName": "UnityUtilities",
+    "moduleNamespace": "HitTrax.UnityUtilities",
+    "moduleDependencies": [
+        "CoreUtilities",
+        "GlobalMessagingService"
+    ],
+    "precompiledDependencies": []
+}

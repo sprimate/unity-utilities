@@ -1,6 +1,6 @@
 {
   "name": "com.sprimatestudios.utilities",
-  "version": "1.0.23",
+  "version": "1.0.25",
   "displayName": "Sprimate Utilities",
   "description": "Utilities developed by Sprimate throughout his Unity career.",
   "unity": "2022.3",
@@ -17,13 +17,12 @@
     "com.unity.modules.particlesystem": "1.0.0",
     "com.unity.modules.jsonserialize": "1.0.0",
     "com.unity.nuget.newtonsoft-json": "3.0.2",
-    "com.unity.modules.audio": "1.0.0"
-
+    "com.unity.modules.audio": "1.0.0",
+    "com.unity.render-pipelines.universal": "17.0.3",
+    "com.unity.splines": "2.7.2"
   },
   "manualDependenciesToAdd" : {
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask#2.5.10",
-    "com.boxqkrtm.ide.cursor": "https://github.com/boxqkrtm/com.unity.ide.cursor.git",
-    "com.unity.uiextensions": "https://github.com/Unity-UI-Extensions/com.unity.uiextensions.git"
+    "com.boxqkrtm.ide.cursor": "https://github.com/boxqkrtm/com.unity.ide.cursor.git"
   },
-  "instructions": "Unity doesn't support git dependencies like this, so you need to add UniTask directly. This is the version I've been using"
+  "instructions": "Unity doesn't support git dependencies like this, so you need to add UniTask directly. These are the versions I've been using"
 }

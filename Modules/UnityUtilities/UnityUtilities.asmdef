@@ -1,0 +1,21 @@
+{
+    "name": "UnityUtilities",
+    "rootNamespace": "HitTrax.UnityUtilities",
+    "references": [
+        "CoreUtilities",
+        "UniTask",
+        "Unity.TextMeshPro",
+        "Unity.Splines",
+        "GlobalMessagingService",
+        "Unity.RenderPipelines.Core.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

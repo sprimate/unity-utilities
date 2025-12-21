@@ -1,0 +1,8 @@
+{
+    "moduleName": "GlobalMessagingService",
+    "moduleNamespace": "HitTrax.GlobalMessagingService",
+    "moduleDependencies": [
+        "CoreUtilities"
+    ],
+    "precompiledDependencies": []
+}
