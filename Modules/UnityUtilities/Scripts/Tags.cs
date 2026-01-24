@@ -4,7 +4,9 @@ using HitTrax.CoreUtilities;
 using static HitTrax.CoreUtilities.SafeFunctions;
 using System.Collections.Generic;
 using System.Linq;
+#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
+#endif
 
 namespace HitTrax.UnityUtilities
 {
@@ -15,9 +17,16 @@ namespace HitTrax.UnityUtilities
     /// instead of just the limitation of one unity tag.
     /// </summary>
 
-    public class Tags : MonoBehaviour, ISelfValidator
+    public class Tags : MonoBehaviour
+#if ODIN_INSPECTOR
+    , ISelfValidator
+#endif
     {
+#if ODIN_INSPECTOR
         [ValueDropdown(nameof(GetValidTags))]
+#else
+        [SerializeField]
+#endif
         public List<string> tags = new();
 
         void OnEnable()
@@ -35,6 +44,7 @@ namespace HitTrax.UnityUtilities
         ///////VALIDATIONS/////////
         private IEnumerable<string> GetValidTags() => TagLibrary.GetValidTags();
 
+#if ODIN_INSPECTOR
         public void Validate(SelfValidationResult result)
         {
             var validTags = GetValidTags();
@@ -50,9 +60,14 @@ namespace HitTrax.UnityUtilities
                 result.AddWarning($"Potential Invalid Tag: [{invalidTag}]");
             }
         }
+#endif
 
 #if UNITY_EDITOR
+#if ODIN_INSPECTOR
         [SerializeField, CustomValueDrawer(nameof(CheckSubmitNewTag))]
+#else
+        [SerializeField]
+#endif
         private string _newTag;
 
         private string CheckSubmitNewTag(string value, GUIContent label)
@@ -65,7 +80,9 @@ namespace HitTrax.UnityUtilities
             return UnityEditor.EditorGUI.TextField(UnityEditor.EditorGUILayout.GetControlRect(), label, value);
         }
 
+#if ODIN_INSPECTOR
         [Button("Add", Icon = SdfIconType.Plus, Style = ButtonStyle.FoldoutButton, Expanded = true)]
+#endif
         private void AddNewTag()
         {
             if (string.IsNullOrWhiteSpace(_newTag))
@@ -94,7 +111,9 @@ namespace HitTrax.UnityUtilities
             }
         }
 
+#if ODIN_INSPECTOR
         [Button, PropertyOrder(-100)]
+#endif
         private void ViewTagLibrary()
         {
             UnityEditor.Selection.activeObject = TagLibrary.Instance;
@@ -132,14 +151,14 @@ namespace HitTrax.UnityUtilities
         /// <remarks>
         /// This extends off of any component as a convenience.
         /// </remarks>
-       
+
         public static bool IsTag<T>(this T component, string tag) where T : Component
             => component.tag == tag || component.IsTagInCache(tag);
 
         /// <summary>
         /// Is this object of the tag type?
         /// </summary>       
-        
+
         public static bool IsTag(this GameObject gameObject, string tag)
             => gameObject.tag == tag || gameObject.transform.IsTagInCache(tag);
 
@@ -175,7 +194,7 @@ namespace HitTrax.UnityUtilities
         /// Does this object have any of the following tags?
         /// </summary>
 
-        public static bool HasAnyTag(this GameObject gameObject, IEnumerable<string> tags) 
+        public static bool HasAnyTag(this GameObject gameObject, IEnumerable<string> tags)
             => gameObject.transform.HasAnyTag(tags);
 
         /// <summary>
@@ -261,7 +280,7 @@ namespace HitTrax.UnityUtilities
                    .Where(tag => tag.HasAllTags(tags))
                    .Safe()
                    ;
-                 
+
 
 
         /// <summary>
@@ -272,7 +291,7 @@ namespace HitTrax.UnityUtilities
             => _taggedObjectsByTag
                 .TryGet(tag)
                 .SelectOut(ToGameObjects, () => new GameObject[0]);
-        
+
         public static GameObject[] GetObjectsByTag(this string tag, Scene requiredScene)
             => tag
                 .GetObjectsByTag()
@@ -283,7 +302,7 @@ namespace HitTrax.UnityUtilities
             => tag.Select(t => t.GetFirstObjectByTag(requiredScene));
 
         public static Safe<GameObject> GetFirstObjectByTag(this string tag, Safe<Scene> requiredScene = default)
-        {            
+        {
             var objs = requiredScene.SelectOut(scene => tag.GetObjectsByTag(scene), () => tag.GetObjectsByTag());
             if (objs.Length == 0)
             {
@@ -307,9 +326,9 @@ namespace HitTrax.UnityUtilities
             const string untagged = "Untagged";
             Tags tagComponent = component.GetComponent<Tags>();
 
-            if(tagComponent == null)
+            if (tagComponent == null)
             {
-                return  (component.tag != untagged) ? new string[] { component.tag } : new string[0];
+                return (component.tag != untagged) ? new string[] { component.tag } : new string[0];
             }
             else
             {

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
+#endif
 using HitTrax.CoreUtilities;
 
 namespace HitTrax.UnityUtilities
@@ -10,7 +12,11 @@ namespace HitTrax.UnityUtilities
     {
         internal const string ASSET_PATH = "Assets/Editor/TagLibrary.asset";
 
+#if ODIN_INSPECTOR
         [SerializeField, Delayed, OnCollectionChanged(nameof(Sort)), OnValueChanged(nameof(Sort), includeChildren: true)]
+#else
+        [SerializeField]
+#endif
         private List<string> _validTags = new();
 
         private static TagLibrary _instance;

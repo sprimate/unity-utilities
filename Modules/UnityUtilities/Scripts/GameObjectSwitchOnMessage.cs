@@ -1,13 +1,19 @@
 using UnityEngine;
-using HitTrax.GlobalMessagingService;
+#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
+#endif
+using HitTrax.GlobalMessagingService;
 using System.Collections.Generic;
 using HitTrax.CoreUtilities;
 using System;
 
 namespace HitTrax.UnityUtilities
 {
+#if ODIN_INSPECTOR
     public class GameObjectSwitchOnMessage : SerializedMonoBehaviour
+#else
+    public class GameObjectSwitchOnMessage : MonoBehaviour
+#endif
     {
         [Serializable]
         public class MessageGoPair

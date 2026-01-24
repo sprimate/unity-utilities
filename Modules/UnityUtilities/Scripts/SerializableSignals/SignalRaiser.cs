@@ -1,4 +1,6 @@
+#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
+#endif
 using UnityEngine;
 
 namespace HitTrax.UnityUtilities
@@ -8,8 +10,10 @@ namespace HitTrax.UnityUtilities
         [SerializeReference]
         private ISerializableSignal _eventInstance;
 
+#if ODIN_INSPECTOR
         [ShowIf("@UnityEngine.Application.isPlaying")]
         [Button]//raise the event directly from an inspector on click
+#endif
         public void Raise()
         {
             if (_eventInstance != null)
