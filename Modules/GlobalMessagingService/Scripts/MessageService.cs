@@ -13,7 +13,7 @@ namespace HitTrax.GlobalMessagingService
         //public static IMessageService_v1 V2 => Services.Get<IMessageService_v2>();
     }
 
-    internal class MessageService : IMessageService_v1 { }
+    public class MessageService : IMessageService_v1 { }
 
     public interface IMessageKey<T> { }
     public interface IMessageKey : IMessageKey<Nothing> { }
