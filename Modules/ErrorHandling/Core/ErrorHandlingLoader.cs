@@ -1,7 +1,7 @@
 using HitTrax.CoreUtilities;
 using HitTrax.GlobalMessagingService;
 using static HitTrax.CoreUtilities.SafeFunctions;
-
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -19,7 +19,7 @@ namespace HitTrax.ErrorHandling
         /// <summary>
         /// Create a log type or get it if it's already been created
         /// </summary>
-        
+
         LogInfo Error(int code, string key, string message)
             => LoggerInternal.Error(code, key, message);
 
@@ -131,7 +131,8 @@ namespace HitTrax.ErrorHandling
         /// </summary>
         internal bool Fail => ErrorCode.HasValue;
 
-        public override string ToString() {
+        public override string ToString()
+        {
             string errorCode = ErrorCode.HasValue ? $"Error Code: {ErrorCode.UnboxRaw()} - " : "";
             string key = string.IsNullOrEmpty(Key) ? "" : $"{Key} - ";
             return $"{errorCode}{key}{Description} {AdditionalInfo} {ExceptionMessage(Exception)}";
@@ -146,26 +147,26 @@ namespace HitTrax.ErrorHandling
         public static void Load()
         {
             // This is where you can initialize your module
-            Services.RegisterSingleton(new ErrorLogService());            
+            Services.RegisterSingleton(new ErrorLogService());
         }
     }
 
     // Defined error codes for this Service
     internal static class ErrorCreationErrors
-    {        
+    {
         internal static LogInfo ErrorCodeMismatch => new LogInfo(10000, "Duplicate Log Codes", "Duplicate Log Codes are not allowed.");
         internal static LogInfo ErrorKeyMismatch => new LogInfo(10001, "Duplicate Log Key", "Duplicate Log keys are not allowed.");
     }
 
     public static class LoggerInternal
-    {    
+    {
         internal static Dictionary<int, LogInfo> _logDict = new();
 
         /// <summary>
         /// This either creates an error or gets the error already created and returns that error out
         /// If the error error already exists (matches code or key) an error will be logged accordingly
         /// </summary>
-        
+
         internal static LogInfo Error(int errorCode, string key, string message)
             => GetOrAddError(new LogInfo(errorCode, key, message))
                 .SelectOut(e => e, () => _logDict[errorCode]);
@@ -202,14 +203,14 @@ namespace HitTrax.ErrorHandling
         /// <param name="newError"></param>
         /// <param name="sourceError"></param>
         /// <returns></returns>
-        
+
         internal static LogInfo CheckMismatch(LogInfo newError, LogInfo sourceError)
         {
             if (newError.ErrorCode.Equals(sourceError.ErrorCode) && newError.Key != sourceError.Key)
             {
                 // Error Key Mismatch
                 RaiseError(ErrorCreationErrors.ErrorCodeMismatch, $"{newError}");
-                
+
             }
             else if (newError.Key == sourceError.Key && !newError.Equals(sourceError.ErrorCode))
             {
