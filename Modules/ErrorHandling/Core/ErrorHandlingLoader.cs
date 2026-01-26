@@ -142,6 +142,7 @@ namespace HitTrax.ErrorHandling
     public static class ErrorHandlingLoader
     {
         // DO NOT CHANGE THE NAME OF THIS FUNCTION OR YOUR MODULE WILL BREAK
+        [RuntimeInitializeOnLoadMethod]
         public static void Load()
         {
             // This is where you can initialize your module
