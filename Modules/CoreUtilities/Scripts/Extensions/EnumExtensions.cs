@@ -25,8 +25,8 @@ public static class EnumExtensions
 
     public static bool Has<T>(this T input, T potentiallyContainedValue) where T : Enum
     {
-        ulong potentiallyContainedInt = Convert.ToUInt64(potentiallyContainedValue);
-        ulong inputInt = Convert.ToUInt64(input);
+        ulong potentiallyContainedInt = ToUInt64(potentiallyContainedValue);
+        ulong inputInt = ToUInt64(input);
 
         if (potentiallyContainedInt == 0) //the bitwise op always returns true for 0
         {
@@ -34,5 +34,11 @@ public static class EnumExtensions
         }
 
         return potentiallyContainedInt == inputInt || (inputInt & potentiallyContainedInt) == potentiallyContainedInt;
+    }
+
+    /// <summary>Converts enum to ulong, preserving bit pattern so that -1 (all flags) works in checked contexts.</summary>
+    private static ulong ToUInt64<T>(T value) where T : Enum
+    {
+        return unchecked((ulong)Convert.ToInt64(value));
     }
 }
