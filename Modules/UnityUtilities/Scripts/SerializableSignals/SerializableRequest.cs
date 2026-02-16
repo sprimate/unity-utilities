@@ -143,7 +143,7 @@ namespace HitTrax.UnityUtilities
 
     public abstract class ASerializableRequest<TEventSelf> : ARequest<TEventSelf>, ISerializableRequest where TEventSelf : ARequest<TEventSelf>, new()
     {
-        public ISerializableRequest Clone() => (ISerializableRequest) MemberwiseClone();
+        public ISerializableRequest Clone() => (ISerializableRequest)MemberwiseClone();
     }
 
     /// <summary>
@@ -156,18 +156,14 @@ namespace HitTrax.UnityUtilities
     public abstract class ARequest<TEventSelf, TResult> : ARequest<TEventSelf>, IRequest<TResult> where TEventSelf : ARequest<TEventSelf>
     {
         private TResult _result;
-        private Action<RequestStatus, TResult> _onComplete;
         public void OnCompleted(Action<RequestStatus, TResult> onDone)
         {
-            if (Status == RequestStatus.Completed)
+            base.OnCompleted(status =>
             {
-                onDone?.Invoke(Status, _result);
-            }
-            else if (Status != RequestStatus.TimedOut)
-            {
-                _onComplete += onDone;
-            }
+                onDone?.Invoke(status, _result);
+            });
         }
+
 
         public bool TryGetResult(out TResult outResult)
         {
@@ -186,7 +182,6 @@ namespace HitTrax.UnityUtilities
         public void Complete(TResult result)
         {
             _result = result;
-            _onComplete?.Invoke(Status, result);
             base.Complete();
         }
 
@@ -205,11 +200,11 @@ namespace HitTrax.UnityUtilities
 
     public abstract class ASerializableRequest<TEventSelf, TResult> : ARequest<TEventSelf, TResult>, ISerializableRequest<TResult> where TEventSelf : ARequest<TEventSelf>, new()
     {
-        public ISerializableRequest Clone() => (ISerializableRequest) MemberwiseClone();
+        public ISerializableRequest Clone() => (ISerializableRequest)MemberwiseClone();
     }
 
     public interface IRequest : ISignal
-    { 
+    {
         void Complete();
         void Cancel();
         void Raise(Action<RequestStatus> onComplete, float? timeout = 2f);
@@ -222,7 +217,8 @@ namespace HitTrax.UnityUtilities
     }
 
     public interface ISerializableRequest<TRet> : IRequest<TRet> { }
-    public interface ISerializableRequest : IRequest {
+    public interface ISerializableRequest : IRequest
+    {
         ISerializableRequest Clone();
         TRet Clone<TRet>() where TRet : ISerializableRequest => (TRet)Clone();
     }
