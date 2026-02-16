@@ -9,7 +9,11 @@ namespace HitTrax.UnityUtilities
     /// </summary>
     public abstract class ASignal<TSelf> : IMessageKey<TSelf>, ISignal where TSelf : ASignal<TSelf>
     {
-        public virtual void Raise() => Services.Get<IMessageService_v1>().Raise(this as TSelf);
+        public virtual void Raise() => SendMessage();
+        protected virtual void SendMessage()
+        {
+            Services.Get<IMessageService_v1>().Raise(this as TSelf);
+        }    
     }
 
     public abstract class ASerializableSignal<TSelf> : ASignal<TSelf>, ISerializableSignal where TSelf : ASerializableSignal<TSelf>, new() { }

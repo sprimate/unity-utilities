@@ -164,7 +164,6 @@ namespace HitTrax.UnityUtilities
             });
         }
 
-
         public bool TryGetResult(out TResult outResult)
         {
             outResult = _result;
