@@ -16,8 +16,8 @@ namespace HitTrax.UnityUtilities
     public abstract class ARequest<TEventSelf> : ASignal<TEventSelf>, IRequest where TEventSelf : ARequest<TEventSelf>
     {
         private Action<RequestStatus> _onComplete;
-        private UniTaskCompletionSource _completionSource;
-        private CancellationTokenSource _cts;
+        protected UniTaskCompletionSource _completionSource;
+        protected CancellationTokenSource _cts;
         private bool IsDone => Status == RequestStatus.Completed || Status == RequestStatus.Canceled || Status == RequestStatus.TimedOut;
 
         public RequestStatus Status { get; private set; }
@@ -55,8 +55,25 @@ namespace HitTrax.UnityUtilities
             }
         }
 
+        public virtual bool TryCancel()
+        {
+            if (IsDone || Status == RequestStatus.NotStarted || Status != RequestStatus.Active)
+            {
+                return false;
+            }
+
+            _cts.Cancel();
+            return true;
+        }
+
         public virtual void Cancel()
         {
+            if (TryCancel())
+            {
+                return;
+            }
+
+
             if (IsDone)
             {
                 Debug.LogError($"Calling {nameof(Cancel)}() on an already-finished request");
@@ -65,10 +82,6 @@ namespace HitTrax.UnityUtilities
             {
                 //Shouldn't get here
                 Debug.LogError($"Calling {nameof(Cancel)}() on a not-started request");
-            }
-            else if (Status == RequestStatus.Active)
-            {
-                _cts.Cancel();
             }
             else
             {
