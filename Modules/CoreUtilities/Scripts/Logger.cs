@@ -50,35 +50,35 @@ namespace HitTrax.CoreUtilities
         }
 
         [HideInCallstack]
-        public static string Log(this string message, UnityEngine.Object context = null)
+        public static string Log(this string message, object context = null)
         {
             AddToGlobalLogCache(message);
-            UnityEngine.Debug.Log(message);
+            UnityEngine.Debug.Log(message, context as UnityEngine.Object);
             return message;
         }
 
         [HideInCallstack]
-        public static string Log(this string message, string categories, UnityEngine.Object context = null)
+        public static string Log(this string message, string categories, object context = null)
         {
             foreach (var cat in categories.Split(CAT_SEPARATOR))
             {
                 AddToLogCache(message, cat);
             }
 
-            Log(message);
+            Log(message, context);
             return message;
         }
 
         [HideInCallstack]
-        public static string LogError(this string message, UnityEngine.Object context = null)
+        public static string LogError(this string message, object context = null)
         {
             AddToGlobalLogCache($"Error: {message}");
-            UnityEngine.Debug.LogError(message, context);
+            UnityEngine.Debug.LogError(message, context as UnityEngine.Object);
             return message;
         }
 
         [HideInCallstack]
-        public static string LogWarning(this string message, UnityEngine.Object context = null)
+        public static string LogWarning(this string message, object context = null)
         {
             if (!DebugMode.IsActive)
             {
@@ -86,20 +86,20 @@ namespace HitTrax.CoreUtilities
             }
 
             AddToGlobalLogCache($"Warning: {message}");
-            UnityEngine.Debug.LogWarning(message, context);
+            UnityEngine.Debug.LogWarning(message, context as UnityEngine.Object);
             return message;
         }
 
         [HideInCallstack]
-        public static Exception LogException(this Exception ex, UnityEngine.Object context = null)
+        public static Exception LogException(this Exception ex, object context = null)
         {
             AddToGlobalLogCache($"Exception: {ex.ToString()}");
-            UnityEngine.Debug.LogException(ex, context);
+            UnityEngine.Debug.LogException(ex, context as UnityEngine.Object);
             return ex;
         }
 
         [HideInCallstack]
-        public static string Log(this string message, bool shouldDisplay, UnityEngine.Object context = null)
+        public static string Log(this string message, bool shouldDisplay, object context = null)
         {
             if (!DebugMode.IsActive)
             {
@@ -115,7 +115,7 @@ namespace HitTrax.CoreUtilities
         }
 
         [HideInCallstack]
-        public static void LogError(this string message, bool shouldDisplay, UnityEngine.Object context = null)
+        public static void LogError(this string message, bool shouldDisplay, object context = null)
         {
             if (shouldDisplay)
             {
@@ -125,7 +125,7 @@ namespace HitTrax.CoreUtilities
         }
 
         [HideInCallstack]
-        public static void LogWarning(this string message, bool shouldDisplay, UnityEngine.Object context = null)
+        public static void LogWarning(this string message, bool shouldDisplay, object context = null)
         {
             if (shouldDisplay)
             {
@@ -135,7 +135,7 @@ namespace HitTrax.CoreUtilities
         }
 
         [HideInCallstack]
-        public static void LogInfo(this string message, bool shouldDisplay = true, UnityEngine.Object context = null)
+        public static void LogInfo(this string message, bool shouldDisplay = true, object context = null)
         {
             if (shouldDisplay)
             {
@@ -145,7 +145,7 @@ namespace HitTrax.CoreUtilities
         }
 
         [HideInCallstack]
-        public static void LogCaution(this string message, bool shouldDisplay = true, UnityEngine.Object context = null)
+        public static void LogCaution(this string message, bool shouldDisplay = true, object context = null)
         {
             if (shouldDisplay)
             {
@@ -155,7 +155,7 @@ namespace HitTrax.CoreUtilities
         }
 
         [HideInCallstack]
-        public static void LogDebug(this string message, bool shouldDisplay, UnityEngine.Object context = null)
+        public static void LogDebug(this string message, bool shouldDisplay, object context = null)
         {
             if (shouldDisplay || DebugMode.IsActive)
             {
@@ -166,7 +166,7 @@ namespace HitTrax.CoreUtilities
 
 #if UNITY_EDITOR
         [HideInCallstack]
-        public static void LogTrace(this string message, bool shouldDisplay = true, UnityEngine.Object context = null)
+        public static void LogTrace(this string message, bool shouldDisplay = true, object context = null)
         {
             if (shouldDisplay)
             {
@@ -179,7 +179,7 @@ namespace HitTrax.CoreUtilities
 #endif
 
         [HideInCallstack]
-        public static void Log(this string message, Func<bool> req, UnityEngine.Object context = null)
+        public static void Log(this string message, Func<bool> req, object context = null)
         {
             if (!DebugMode.IsActive)
             {
@@ -193,7 +193,7 @@ namespace HitTrax.CoreUtilities
         }
 
         [HideInCallstack]
-        public static void Log(this string message, Func<bool> req, string categories, UnityEngine.Object context = null)
+        public static void Log(this string message, Func<bool> req, string categories, object context = null)
         {
             if(req == null || req())
             {
@@ -202,7 +202,7 @@ namespace HitTrax.CoreUtilities
         }
 
         [HideInCallstack]
-        public static void LogOnce(string message, object key, UnityEngine.Object context = null)
+        public static void LogOnce(string message, object key, object context = null)
         {
             if (!_logOnceKeys.Contains(key))
             {
@@ -259,12 +259,12 @@ namespace HitTrax.CoreUtilities
         [HideInCallstack]
         public static T LogFrom<T>(this T source, string message)
         {
-            message.Log(source as UnityEngine.Object);
+            message.Log(source);
             return source;
         }
 
         [HideInCallstack]
-        public static T LogFrom<T>(this T source, string message, UnityEngine.Object context)
+        public static T LogFrom<T>(this T source, string message, object context)
         {
             message.Log(context);
             return source;
@@ -294,7 +294,7 @@ namespace HitTrax.CoreUtilities
         }
 
         [HideInCallstack]
-        public static T LogWarning<T>(this T source, string message, UnityEngine.Object context)
+        public static T LogWarning<T>(this T source, string message, object context)
         {
             message.LogWarning(context);
             return source;
@@ -324,45 +324,45 @@ namespace HitTrax.CoreUtilities
         }
 
         [HideInCallstack]
-        public static T LogError<T>(this T source, string message, UnityEngine.Object context)
+        public static T LogError<T>(this T source, string message, object context)
         {
             message.LogError(context);
             return source;
         }
 
         [HideInCallstack]
-        public static void Info(this string message, bool shouldDisplay = true, UnityEngine.Object context = null)
+        public static void Info(this string message, bool shouldDisplay = true, object context = null)
             => LogInfo(message, shouldDisplay, context);
 
         [HideInCallstack]
         //"ShouldDisplay" is mandatory here, unlike the other levels. Since it's 'Debug', We want to make sure you're in "debug" mode before showing
-        public static void Debug(this string message, bool shouldDisplay = true, UnityEngine.Object context = null)
+        public static void Debug(this string message, bool shouldDisplay = true, object context = null)
             => LogDebug(message, shouldDisplay, context);
 
 #if UNITY_EDITOR
         //(Priyal) This obsolete tag makes it more obvious in an IDE if you forgot to delete a Trace before merging to stable
         //It also makes it easier to find your relevant logs at a glance in a long script
         [HideInCallstack, Obsolete("This should be used as a personal log function for developing and debugging, and should not be committed.", false)]
-        public static void Trace(this string message, bool shouldDisplay, UnityEngine.Object context = null)
+        public static void Trace(this string message, bool shouldDisplay, object context = null)
             => LogTrace(message, shouldDisplay, context);
 
         //(Priyal) This obsolete tag makes it more obvious in an IDE if you forgot to delete a Trace before merging to stable
         //It also makes it easier to find your relevant logs at a glance in a long script
         [HideInCallstack, Obsolete("This should be used as a personal log function for developing and debugging, and should not be committed.", false)]
-        public static void Trace(this string message, UnityEngine.Object context = null)
+        public static void Trace(this string message, object context = null)
             => message.Trace(true, context);
 #endif
 
         [HideInCallstack]
-        public static void Caution(this string message, bool shouldDisplay = true, UnityEngine.Object context = null)
+        public static void Caution(this string message, bool shouldDisplay = true, object context = null)
             => LogCaution(message, shouldDisplay, context);
 
         [HideInCallstack]
-        public static void Error(this string message, bool shouldDisplay = true, UnityEngine.Object context = null)
+        public static void Error(this string message, bool shouldDisplay = true, object context = null)
             => LogError(message, shouldDisplay, context);
 
         [HideInCallstack]
-        public static void LogGui(this string message, bool shouldDisplay = true, UnityEngine.Object context = null)
+        public static void LogGui(this string message, bool shouldDisplay = true, object context = null)
             => LogGui(message, shouldDisplay, context);
 
         public static List<string> GetGlobalLogCache()
