@@ -410,12 +410,6 @@ namespace UnityEngine
             Normalize(t);
         }
 
-        public static void SetParentAndNormalize(this Transform t, Transform parent, bool updatePosition = true, bool updateRotation = true, bool updateScale = true)
-        {
-            t.SetParent(parent);
-            t.Normalize(updatePosition, updateRotation, updateScale);
-        }
-
         public static void Normalize(this Transform t, bool updatePosition = true, bool updateRotation = true, bool updateScale = true)
         {
             if (updateRotation)
