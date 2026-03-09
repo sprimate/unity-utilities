@@ -120,7 +120,6 @@ namespace HitTrax.UnityUtilities
             }
             catch (OperationCanceledException)
             {
-                Debug.Log("Canceled!!");
                 Status = RequestStatus.Canceled;
             }
 
